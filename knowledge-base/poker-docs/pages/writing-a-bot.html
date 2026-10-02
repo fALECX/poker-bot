@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-g5ptsecz"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Writing a bot | macpoker docs</title><link rel="canonical" href="https://docs.poker.monashcoding.com/writing-a-bot/"/><link rel="sitemap" href="/sitemap-index.xml"/><link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v7.3.5"/><meta name="generator" content="Starlight v0.42.4"/><meta property="og:title" content="Writing a bot"/><meta property="og:type" content="article"/><meta property="og:url" content="https://docs.poker.monashcoding.com/writing-a-bot/"/><meta property="og:locale" content="en"/><meta property="og:description" content="Everything your bot can see and do: the decision method, every field on state and the observer hooks."/><meta property="og:site_name" content="macpoker docs"/><meta name="twitter:card" content="summary_large_image"/><meta name="description" content="Everything your bot can see and do: the decision method, every field on state and the observer hooks."/><script>
+	document.documentElement.dataset.theme = "dark";
+	window.StarlightThemeProvider = { updatePickers() {} };
+</script><link rel="stylesheet" href="/_astro/print.ehPL0gv-.css" media="print"><link rel="stylesheet" href="/_astro/common.IjyTVRb8.css"><style>@layer starlight.components{svg:where(.astro-hkc32dio){color:var(--sl-icon-color);font-size:var(--sl-icon-size,1em);width:1em;height:1em}}
+</style><script type="module" src="/_astro/page.Dwipeu-R.js"></script></head><body class="astro-g5ptsecz"><a class="sl-skip-link astro-qb7clj6f" href="#_top">Skip to content</a><div class="page sl-flex astro-yntsjkba"><header class="header astro-yntsjkba"><div class="mac-header astro-nen7h5rs"><div class="mac-header-title astro-nen7h5rs"><a href="/" class="mac-title astro-hen6hmfb"><img src="/_astro/mac.BlnNpfAA.svg" alt="MAC" width="32" height="32" class="astro-hen6hmfb"><span class="mac-title-text astro-hen6hmfb"><span class="mac-title-main astro-hen6hmfb">MAC</span><span class="mac-title-sub astro-hen6hmfb">poker bot docs</span></span></a></div><div class="mac-header-search print:hidden astro-nen7h5rs"><site-search class="astro-nen7h5rs astro-b5kgnn7o" data-translations="{&quot;placeholder&quot;:&quot;Search&quot;}"><button data-open-modal disabled aria-label="Search" aria-keyshortcuts="Control+K" class="astro-b5kgnn7o"><svg aria-hidden="true" class="astro-b5kgnn7o astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg><span class="sl-hidden md:sl-block astro-b5kgnn7o" aria-hidden="true">Search</span><kbd class="sl-hidden md:sl-flex astro-b5kgnn7o" style="display: none;"><kbd class="astro-b5kgnn7o">Ctrl</kbd><kbd class="astro-b5kgnn7o">K</kbd></kbd></button><dialog style="padding:0" aria-label="Search" class="astro-b5kgnn7o"><div class="dialog-frame sl-flex astro-b5kgnn7o"><button data-close-modal class="sl-flex md:sl-hidden astro-b5kgnn7o">Cancel</button><div class="search-container astro-b5kgnn7o"><div id="starlight__search" class="astro-b5kgnn7o"></div></div></div></dialog></site-search><script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+		shortcut.style.display = '';
+	})();
+</script><script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.DZqJ8Bdf.js"></script></div><div class="mac-header-right sl-hidden md:sl-flex print:hidden astro-nen7h5rs"><a href="https://discord.gg/kkv2hJyzGp" rel="me" class="sl-flex astro-n2mnl6yq"><span class="sr-only astro-n2mnl6yq">Discord</span><svg aria-hidden="true" class="astro-n2mnl6yq astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.09l.02.02a19.9 19.9 0 0 0 6.04 3.03l.04-.02a14.24 14.24 0 0 0 1.23-2.03.08.08 0 0 0-.05-.07 13.1 13.1 0 0 1-1.9-.92.08.08 0 0 1 .02-.1 10.2 10.2 0 0 0 .41-.31h.04a14.2 14.2 0 0 0 12.1 0l.04.01a9.63 9.63 0 0 0 .4.32.08.08 0 0 1-.03.1 12.29 12.29 0 0 1-1.9.91.08.08 0 0 0-.02.1 15.97 15.97 0 0 0 1.27 2.01h.04a19.84 19.84 0 0 0 6.03-3.05v-.03a20.12 20.12 0 0 0-3.57-13.69ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg></a><a class="mac-cta astro-nen7h5rs" href="https://poker.monashcoding.com/app"><span class="mac-cta-wipe astro-nen7h5rs" aria-hidden="true"></span><span class="mac-cta-label astro-nen7h5rs">Open the app</span><svg class="mac-cta-arrow astro-nen7h5rs" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="astro-nen7h5rs"></path></svg></a></div></div></header><nav class="sidebar print:hidden astro-yntsjkba" aria-label="Main"><button popovertarget="starlight__sidebar" class="sl-menu-button sl-flex md:sl-hidden print:hidden astro-r2osgdlg"><svg aria-hidden="true" class="open-menu astro-r2osgdlg astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg><svg aria-hidden="true" class="close-menu astro-r2osgdlg astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="m13.41 12 6.3-6.29a1.004 1.004 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1.004 1.004 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 0 1.42.998.998 0 0 0 1.42 0l6.29-6.3 6.29 6.3a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12Z"/></svg><span class="sr-only astro-r2osgdlg">Menu</span></button><script type="module">var e=class extends HTMLElement{constructor(){super();let e=matchMedia(`(min-width: 50em)`),t=()=>{this.popover=e.matches?null:`auto`};t(),e.addEventListener(`change`,()=>t()),this.addEventListener(`toggle`,({newState:e})=>this.trapFocus(e===`open`))}trapFocus(e){document.querySelectorAll(`.main-frame, .sl-skip-link`).forEach(t=>{t.toggleAttribute(`inert`,e)})}};customElements.define(`sl-sidebar-pane`,e);</script><script type="module">var e=class extends HTMLElement{constructor(){super();let e=this.querySelector(`select`);e&&(e.addEventListener(`change`,e=>{e.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=e.currentTarget.value)}),window.addEventListener(`pageshow`,t=>{if(!t.persisted)return;let n=e.querySelector(`option[selected]`)?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}};customElements.define(`starlight-lang-select`,e);</script><sl-sidebar-pane popover id="starlight__sidebar" class="sidebar-pane astro-yntsjkba"><div class="sidebar-content sl-flex astro-yntsjkba"><sl-sidebar-state-persist data-hash="16zj2yk" class="astro-ipdry5cl"><script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script><ul class="top-level astro-rmhv4bp6"><li class="astro-rmhv4bp6"><details open class="astro-rmhv4bp6"><summary class="astro-rmhv4bp6"><span class="group-label astro-rmhv4bp6"><span class="large astro-rmhv4bp6">Get started</span></span><svg aria-hidden="true" class="caret astro-rmhv4bp6 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></summary><sl-sidebar-restore data-index="0"></sl-sidebar-restore><ul class="astro-rmhv4bp6"><li class="astro-rmhv4bp6"><a href="/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Introduction</span></a></li><li class="astro-rmhv4bp6"><a href="/quickstart/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Quickstart</span></a></li><li class="astro-rmhv4bp6"><a href="/installation/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Installation</span></a></li></ul></details></li><li class="astro-rmhv4bp6"><details open class="astro-rmhv4bp6"><summary class="astro-rmhv4bp6"><span class="group-label astro-rmhv4bp6"><span class="large astro-rmhv4bp6">Build your bot</span></span><svg aria-hidden="true" class="caret astro-rmhv4bp6 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></summary><sl-sidebar-restore data-index="1"></sl-sidebar-restore><ul class="astro-rmhv4bp6"><li class="astro-rmhv4bp6"><a href="/writing-a-bot/" aria-current="page" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Writing a bot</span></a></li><li class="astro-rmhv4bp6"><a href="/local-testing/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Testing locally</span></a></li></ul></details></li><li class="astro-rmhv4bp6"><details open class="astro-rmhv4bp6"><summary class="astro-rmhv4bp6"><span class="group-label astro-rmhv4bp6"><span class="large astro-rmhv4bp6">Reference</span></span><svg aria-hidden="true" class="caret astro-rmhv4bp6 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></summary><sl-sidebar-restore data-index="2"></sl-sidebar-restore><ul class="astro-rmhv4bp6"><li class="astro-rmhv4bp6"><details open class="astro-rmhv4bp6"><summary class="astro-rmhv4bp6"><span class="group-label astro-rmhv4bp6"><span class="large astro-rmhv4bp6">Game format</span></span><svg aria-hidden="true" class="caret astro-rmhv4bp6 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></summary><sl-sidebar-restore data-index="3"></sl-sidebar-restore><ul class="astro-rmhv4bp6"><li class="astro-rmhv4bp6"><a href="/game-format/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Overview</span></a></li><li class="astro-rmhv4bp6"><a href="/game-format/duplicate-deals/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Duplicate deals</span></a></li><li class="astro-rmhv4bp6"><a href="/game-format/information/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Opponents and information</span></a></li><li class="astro-rmhv4bp6"><a href="/game-format/clocks/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Clocks and verdicts</span></a></li><li class="astro-rmhv4bp6"><a href="/game-format/scoring/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Scoring and rounds</span></a></li></ul></details></li><li class="astro-rmhv4bp6"><a href="/rules/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Rules</span></a></li><li class="astro-rmhv4bp6"><a href="/protocol/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">Wire protocol</span></a></li></ul></details></li><li class="astro-rmhv4bp6"><details open class="astro-rmhv4bp6"><summary class="astro-rmhv4bp6"><span class="group-label astro-rmhv4bp6"><span class="large astro-rmhv4bp6">Help</span></span><svg aria-hidden="true" class="caret astro-rmhv4bp6 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></summary><sl-sidebar-restore data-index="4"></sl-sidebar-restore><ul class="astro-rmhv4bp6"><li class="astro-rmhv4bp6"><a href="/faq/" class="astro-rmhv4bp6"><span class="astro-rmhv4bp6">FAQ</span></a></li></ul></details></li></ul><script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script></sl-sidebar-state-persist><div class="md:sl-hidden"><div class="mobile-preferences sl-flex astro-p4azlveh"><div class="social-icons astro-p4azlveh"><a href="https://discord.gg/kkv2hJyzGp" rel="me" class="sl-flex astro-n2mnl6yq"><span class="sr-only astro-n2mnl6yq">Discord</span><svg aria-hidden="true" class="astro-n2mnl6yq astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.09l.02.02a19.9 19.9 0 0 0 6.04 3.03l.04-.02a14.24 14.24 0 0 0 1.23-2.03.08.08 0 0 0-.05-.07 13.1 13.1 0 0 1-1.9-.92.08.08 0 0 1 .02-.1 10.2 10.2 0 0 0 .41-.31h.04a14.2 14.2 0 0 0 12.1 0l.04.01a9.63 9.63 0 0 0 .4.32.08.08 0 0 1-.03.1 12.29 12.29 0 0 1-1.9.91.08.08 0 0 0-.02.1 15.97 15.97 0 0 0 1.27 2.01h.04a19.84 19.84 0 0 0 6.03-3.05v-.03a20.12 20.12 0 0 0-3.57-13.69ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg></a></div></div></div></div></sl-sidebar-pane></nav><div class="main-frame astro-yntsjkba"><script type="module">var e=document.getElementById(`starlight__sidebar`),t=e?.querySelector(`sl-sidebar-state-persist`),n=`sl-sidebar-state`,r=()=>{let r=[],i=t?.dataset.hash||``;try{let e=sessionStorage.getItem(n),t=JSON.parse(e||`{}`);Array.isArray(t.open)&&t.hash===i&&(r=t.open)}catch{}return{hash:i,open:r,scroll:e?.scrollTop||0}},i=e=>{try{sessionStorage.setItem(n,JSON.stringify(e))}catch{}},a=()=>i(r()),o=(e,t)=>{let n=r();n.open[t]=e,i(n)};t?.addEventListener(`click`,e=>{if(!(e.target instanceof Element))return;let t=e.target.closest(`summary`)?.closest(`details`);if(!t)return;let n=t.querySelector(`sl-sidebar-restore`),r=parseInt(n?.dataset.index||``);isNaN(r)||o(!t.open,r)}),addEventListener(`visibilitychange`,()=>{document.visibilityState===`hidden`&&a()});</script><div class="lg:sl-flex astro-lrzkfocr"><aside class="right-sidebar-container print:hidden astro-lrzkfocr"><div class="right-sidebar astro-lrzkfocr"><div class="lg:sl-hidden astro-qok35upx"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-66cqc7ze"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-66cqc7ze"><details id="starlight__mobile-toc" class="astro-66cqc7ze"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-66cqc7ze"><span class="toggle sl-flex astro-66cqc7ze">On this page<svg aria-hidden="true" class="caret astro-66cqc7ze astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></span><span class="display-current astro-66cqc7ze"></span></summary><div class="dropdown astro-66cqc7ze"><ul class="isMobile astro-jugkfwgx" style="--depth: 0;"><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#_top" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Overview</span></a></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#the-decision-method" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">The decision method</span></a><ul class="isMobile astro-jugkfwgx" style="--depth: 1;"><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#actions" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Actions</span></a></li></ul></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#gamestate-reference" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">GameState reference</span></a><ul class="isMobile astro-jugkfwgx" style="--depth: 1;"><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#your-cards-and-the-table" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Your cards and the table</span></a></li><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#chips" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Chips</span></a></li><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#everyone-else" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Everyone else</span></a></li></ul></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#observing-the-game" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Observing the game</span></a></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#printing" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Printing</span></a></li></ul></div></details></nav></mobile-starlight-toc><script type="module" src="/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.C3fM4Kra.js"></script></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-qok35upx"><div class="sl-container astro-qok35upx"><starlight-toc data-min-h="2" data-max-h="3"><nav aria-labelledby="starlight__on-this-page"><h2 id="starlight__on-this-page">On this page</h2><ul class="astro-jugkfwgx" style="--depth: 0;"><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#_top" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Overview</span></a></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#the-decision-method" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">The decision method</span></a><ul class="astro-jugkfwgx" style="--depth: 1;"><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#actions" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Actions</span></a></li></ul></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#gamestate-reference" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">GameState reference</span></a><ul class="astro-jugkfwgx" style="--depth: 1;"><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#your-cards-and-the-table" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Your cards and the table</span></a></li><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#chips" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Chips</span></a></li><li style="--depth: 1;" class="astro-jugkfwgx"><a href="#everyone-else" style="--depth: 1;" class="astro-jugkfwgx"><span style="--depth: 1;" class="astro-jugkfwgx">Everyone else</span></a></li></ul></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#observing-the-game" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Observing the game</span></a></li><li style="--depth: 0;" class="astro-jugkfwgx"><a href="#printing" style="--depth: 0;" class="astro-jugkfwgx"><span style="--depth: 0;" class="astro-jugkfwgx">Printing</span></a></li></ul></nav></starlight-toc><script type="module" src="/_astro/TableOfContents.astro_astro_type_script_index_0_lang.BpJaGz7G.js"></script></div></div></div></aside><div class="main-pane astro-lrzkfocr"><main data-pagefind-body class="astro-g5ptsecz" lang="en" dir="ltr"><div class="content-panel astro-a7po4psb"><div class="sl-container astro-a7po4psb"><header class="mac-page-head astro-u72m6wot"><div class="mac-eyebrow astro-u72m6wot">Build your bot</div><h1 id="_top" class="astro-u72m6wot">Writing a bot</h1><p class="mac-lede astro-u72m6wot">Everything your bot can see and do: the decision method, every field on state and the observer hooks.</p></header></div></div><div class="content-panel astro-a7po4psb"><div class="sl-container astro-a7po4psb"><div class="sl-markdown-content"><p>Your submission is a zip with a <code dir="auto">main.py</code> at its root. <code dir="auto">main.py</code> defines
+exactly one <code dir="auto">Bot</code> subclass (or a module-level <code dir="auto">bot = MyBot()</code> instance).
+You may split code into other modules in the zip and import them from
+<code dir="auto">main.py</code>.</p>
+<div class="expressive-code"><link rel="stylesheet" href="/_astro/ec.7w65h.css"><script type="module" src="/_astro/ec.0vx5m.js"></script><figure class="frame has-title not-content"><figcaption class="header"><span class="title">main.py</span></figcaption><pre data-language="python"><code><div class="ec-line"><div class="code"><span style="--0:#FF7B72">from</span><span style="--0:#E6EDF3"> macpoker </span><span style="--0:#FF7B72">import</span><span style="--0:#E6EDF3"> Bot</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span style="--0:#FF7B72">class</span><span style="--0:#E6EDF3"> </span><span style="--0:#FFA657">MyBot</span><span style="--0:#E6EDF3">(</span><span style="--0:#79C0FF">Bot</span><span style="--0:#E6EDF3">):</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">act</span><span style="--0:#E6EDF3">(self, state):</span></div></div><div class="ec-line"><div class="code"><span class="indent">        </span><span style="--0:#79C0FF">...</span></div></div><div class="ec-line"><div class="code"><span class="indent">        </span><span style="--0:#FF7B72">return</span><span style="--0:#E6EDF3"> state.call()</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="from macpoker import Botclass MyBot(Bot):    def act(self, state):        ...        return state.call()"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="the-decision-method">The decision method</h2><a class="sl-anchor-link" href="#the-decision-method"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “The decision method”</span></a></div>
+<p><code dir="auto">act(state)</code> is called every time it is your turn. It must return an action
+before your <a href="/game-format/clocks/">clock</a> runs out.</p>
+<div class="sl-heading-wrapper level-h3"><h3 id="actions">Actions</h3><a class="sl-anchor-link" href="#actions"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Actions”</span></a></div>
+<table>
+<thead>
+<tr>
+<th>Return</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code dir="auto">state.check()</code></td>
+<td>Pass the action. Only legal when <code dir="auto">state.to_call == 0</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.call()</code></td>
+<td>Match the current bet (<code dir="auto">state.to_call</code> chips).</td>
+</tr>
+<tr>
+<td><code dir="auto">state.fold()</code></td>
+<td>Give up the hand.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.raise_to(n)</code></td>
+<td>Raise so your total bet this street becomes <code dir="auto">n</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.all_in()</code></td>
+<td>Raise to <code dir="auto">state.max_raise_to</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Illegal actions are coerced to the nearest legal action rather than
+punished: an impossible raise becomes a call, checking a bet folds, and
+out-of-range raise amounts are clamped. Rely on the fields below instead of
+the coercion.</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="gamestate-reference">GameState reference</h2><a class="sl-anchor-link" href="#gamestate-reference"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “GameState reference”</span></a></div>
+<div class="sl-heading-wrapper level-h3"><h3 id="your-cards-and-the-table">Your cards and the table</h3><a class="sl-anchor-link" href="#your-cards-and-the-table"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Your cards and the table”</span></a></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code dir="auto">state.hole</code></td>
+<td><code dir="auto">list[str]</code></td>
+<td>Your two cards, e.g. <code dir="auto">["As", "Td"]</code>. Ranks <code dir="auto">2..9 T J Q K A</code>, suits <code dir="auto">s h d c</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.board</code></td>
+<td><code dir="auto">list[str]</code></td>
+<td>Community cards dealt so far (0, 3, 4 or 5).</td>
+</tr>
+<tr>
+<td><code dir="auto">state.street</code></td>
+<td><code dir="auto">str</code></td>
+<td><code dir="auto">"preflop"</code>, <code dir="auto">"flop"</code>, <code dir="auto">"turn"</code> or <code dir="auto">"river"</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.hand</code></td>
+<td><code dir="auto">int</code></td>
+<td>Hand number within the game.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.seat</code></td>
+<td><code dir="auto">int</code></td>
+<td>Your seat index this hand.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.button</code></td>
+<td><code dir="auto">int</code></td>
+<td>Seat of the dealer button.</td>
+</tr>
+</tbody>
+</table>
+<div class="sl-heading-wrapper level-h3"><h3 id="chips">Chips</h3><a class="sl-anchor-link" href="#chips"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Chips”</span></a></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code dir="auto">state.pot</code></td>
+<td><code dir="auto">int</code></td>
+<td>All chips committed to the pot so far.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.to_call</code></td>
+<td><code dir="auto">int</code></td>
+<td>Chips you must add to stay in. <code dir="auto">0</code> means you may check.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.min_raise_to</code></td>
+<td><code dir="auto">int</code></td>
+<td>Smallest legal raise-to total.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.max_raise_to</code></td>
+<td><code dir="auto">int</code></td>
+<td>Raise-to total that puts you all in.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.can_raise</code></td>
+<td><code dir="auto">bool</code></td>
+<td>Whether raising is legal for you right now.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.stacks</code></td>
+<td><code dir="auto">list[int]</code></td>
+<td>Remaining chips per seat.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.street_bets</code></td>
+<td><code dir="auto">list[int]</code></td>
+<td>Chips each seat has bet on this street.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.my_stack</code></td>
+<td><code dir="auto">int</code></td>
+<td>Shorthand for <code dir="auto">state.stacks[state.seat]</code>.</td>
+</tr>
+</tbody>
+</table>
+<div class="sl-heading-wrapper level-h3"><h3 id="everyone-else">Everyone else</h3><a class="sl-anchor-link" href="#everyone-else"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Everyone else”</span></a></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code dir="auto">state.players</code></td>
+<td><code dir="auto">list[int]</code></td>
+<td>Player id in each seat this hand. Ids stay fixed for the whole game.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.player</code></td>
+<td><code dir="auto">int</code></td>
+<td>Your own player id.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.player_at(seat)</code></td>
+<td><code dir="auto">int</code></td>
+<td>Player id sitting in <code dir="auto">seat</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.seat_of(player)</code></td>
+<td><code dir="auto">int</code></td>
+<td>Seat a player is in this hand.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.folded</code></td>
+<td><code dir="auto">list[bool]</code></td>
+<td>Which seats have folded this hand.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.num_players</code></td>
+<td><code dir="auto">int</code></td>
+<td>Seats at the table.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.players_in_hand</code></td>
+<td><code dir="auto">int</code></td>
+<td>Seats not folded.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.history</code></td>
+<td><code dir="auto">list</code></td>
+<td>Every action this hand: <code dir="auto">[street, seat, kind, amount]</code>.</td>
+</tr>
+<tr>
+<td><code dir="auto">state.clock_ms</code></td>
+<td><code dir="auto">int</code></td>
+<td>Milliseconds left on your clock.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no equity calculator and no pot-odds helper. Working out the maths
+is your job; that is the tournament.</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="observing-the-game">Observing the game</h2><a class="sl-anchor-link" href="#observing-the-game"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Observing the game”</span></a></div>
+<p>Beyond <code dir="auto">act</code>, you may override optional hooks. All are silent no-ops by
+default:</p>
+<div class="expressive-code"><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="python"><code><div class="ec-line"><div class="code"><span style="--0:#FF7B72">class</span><span style="--0:#E6EDF3"> </span><span style="--0:#FFA657">MyBot</span><span style="--0:#E6EDF3">(</span><span style="--0:#79C0FF">Bot</span><span style="--0:#E6EDF3">):</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_match_start</span><span style="--0:#E6EDF3">(self, info): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">   </span><span style="--0:#8B949E"># game config, blinds, clocks</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_hand_start</span><span style="--0:#E6EDF3">(self, info): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">    </span><span style="--0:#8B949E"># your seat and hole cards</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_action</span><span style="--0:#E6EDF3">(self, event): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">       </span><span style="--0:#8B949E"># every action by every seat</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_street</span><span style="--0:#E6EDF3">(self, event): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">       </span><span style="--0:#8B949E"># board reveals</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_hand_end</span><span style="--0:#E6EDF3">(self, info): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">      </span><span style="--0:#8B949E"># results, revealed cards, pots</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_match_end</span><span style="--0:#E6EDF3">(self, info): </span><span style="--0:#79C0FF">...</span><span style="--0:#E6EDF3">     </span><span style="--0:#8B949E"># final chip totals</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="class MyBot(Bot):    def on_match_start(self, info): ...   # game config, blinds, clocks    def on_hand_start(self, info): ...    # your seat and hole cards    def on_action(self, event): ...       # every action by every seat    def on_street(self, event): ...       # board reveals    def on_hand_end(self, info): ...      # results, revealed cards, pots    def on_match_end(self, info): ...     # final chip totals"><div></div></button></div></figure></div>
+<p>Every event also carries <code dir="auto">players</code> (seat to player id), so you can key what
+you learn by player id. Seats move every hand, but player ids stay fixed
+for the whole game:</p>
+<div class="expressive-code"><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="python"><code><div class="ec-line"><div class="code"><span style="--0:#FF7B72">from</span><span style="--0:#E6EDF3"> collections </span><span style="--0:#FF7B72">import</span><span style="--0:#E6EDF3"> defaultdict</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span style="--0:#FF7B72">class</span><span style="--0:#E6EDF3"> </span><span style="--0:#FFA657">MyBot</span><span style="--0:#E6EDF3">(</span><span style="--0:#79C0FF">Bot</span><span style="--0:#E6EDF3">):</span></div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#79C0FF">__init__</span><span style="--0:#E6EDF3">(self):</span></div></div><div class="ec-line"><div class="code"><span class="indent">        </span><span style="--0:#79C0FF">self</span><span style="--0:#E6EDF3">.raises </span><span style="--0:#FF7B72">=</span><span style="--0:#E6EDF3"> defaultdict(</span><span style="--0:#79C0FF">int</span><span style="--0:#E6EDF3">)</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span class="indent">    </span><span style="--0:#FF7B72">def</span><span style="--0:#E6EDF3"> </span><span style="--0:#D2A8FF">on_action</span><span style="--0:#E6EDF3">(self, event):</span></div></div><div class="ec-line"><div class="code"><span class="indent"><span style="--0:#E6EDF3">        </span></span><span style="--0:#E6EDF3">who </span><span style="--0:#FF7B72">=</span><span style="--0:#E6EDF3"> event[</span><span style="--0:#A5D6FF">"players"</span><span style="--0:#E6EDF3">][event[</span><span style="--0:#A5D6FF">"seat"</span><span style="--0:#E6EDF3">]]</span></div></div><div class="ec-line"><div class="code"><span class="indent">        </span><span style="--0:#FF7B72">if</span><span style="--0:#E6EDF3"> event[</span><span style="--0:#A5D6FF">"action"</span><span style="--0:#E6EDF3">] </span><span style="--0:#FF7B72">==</span><span style="--0:#E6EDF3"> </span><span style="--0:#A5D6FF">"raise"</span><span style="--0:#E6EDF3">:</span></div></div><div class="ec-line"><div class="code"><span class="indent">            </span><span style="--0:#79C0FF">self</span><span style="--0:#E6EDF3">.raises[who] </span><span style="--0:#FF7B72">+=</span><span style="--0:#E6EDF3"> </span><span style="--0:#79C0FF">1</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="from collections import defaultdictclass MyBot(Bot):    def __init__(self):        self.raises = defaultdict(int)    def on_action(self, event):        who = event[&quot;players&quot;][event[&quot;seat&quot;]]        if event[&quot;action&quot;] == &quot;raise&quot;:            self.raises[who] += 1"><div></div></button></div></figure></div>
+<p>Keep state between hands on <code dir="auto">self</code>. Each game runs your bot as one process,
+so <code dir="auto">self</code> persists for the whole game and resets between games.</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="printing">Printing</h2><a class="sl-anchor-link" href="#printing"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 1 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 0 0-1.42-1.42m8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 1 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l3.88-3.89a4.49 4.49 0 0 0 0-6.33M8.83 15.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.92-4.92a1 1 0 1 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Printing”</span></a></div>
+<p><code dir="auto">print()</code> is safe: stdout is redirected to the game log, which you can read
+in the app when a validation game finishes. Do not try to write to the
+protocol stream yourself.</p></div><footer class="mac-footer astro-jo6i4kqk"><div class="pagination-links print:hidden astro-b5raizh3" dir="ltr"><a href="/installation/" rel="prev" class="astro-b5raizh3"><svg aria-hidden="true" class="astro-b5raizh3 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg><span class="astro-b5raizh3">Previous<br class="astro-b5raizh3"><span class="link-title astro-b5raizh3">Installation</span></span></a><a href="/local-testing/" rel="next" class="astro-b5raizh3"><svg aria-hidden="true" class="astro-b5raizh3 astro-hkc32dio" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg><span class="astro-b5raizh3">Next<br class="astro-b5raizh3"><span class="link-title astro-b5raizh3">Testing locally</span></span></a></div><div class="mac-help astro-jo6i4kqk"><div class="mac-help-text astro-jo6i4kqk"><div class="mac-help-title astro-jo6i4kqk">Stuck on something?</div><div class="mac-help-body astro-jo6i4kqk">Ask in the hackathon Discord. Mentors and the organisers are in there all weekend.</div></div><a href="https://discord.gg/kkv2hJyzGp" class="mac-help-link astro-jo6i4kqk">Join the Discord</a></div><div class="mac-footer-meta astro-jo6i4kqk"><span class="astro-jo6i4kqk">Monash Association of Coding</span><a href="https://poker.monashcoding.com" class="astro-jo6i4kqk">poker.monashcoding.com</a></div></footer></div></div></main></div></div></div></div></body></html>

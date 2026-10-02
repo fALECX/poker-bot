@@ -1,0 +1,80 @@
+[
+    {
+        "title":  "Introduction | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/",
+        "html":  "pages/index.html",
+        "markdown":  "pages/index.md"
+    },
+    {
+        "title":  "FAQ | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/faq/",
+        "html":  "pages/faq.html",
+        "markdown":  "pages/faq.md"
+    },
+    {
+        "title":  "Game format | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/game-format/",
+        "html":  "pages/game-format.html",
+        "markdown":  "pages/game-format.md"
+    },
+    {
+        "title":  "Clocks and verdicts | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/game-format/clocks/",
+        "html":  "pages/game-format-clocks.html",
+        "markdown":  "pages/game-format-clocks.md"
+    },
+    {
+        "title":  "Duplicate deals | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/game-format/duplicate-deals/",
+        "html":  "pages/game-format-duplicate-deals.html",
+        "markdown":  "pages/game-format-duplicate-deals.md"
+    },
+    {
+        "title":  "Opponents and information | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/game-format/information/",
+        "html":  "pages/game-format-information.html",
+        "markdown":  "pages/game-format-information.md"
+    },
+    {
+        "title":  "Scoring and rounds | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/game-format/scoring/",
+        "html":  "pages/game-format-scoring.html",
+        "markdown":  "pages/game-format-scoring.md"
+    },
+    {
+        "title":  "Installation | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/installation/",
+        "html":  "pages/installation.html",
+        "markdown":  "pages/installation.md"
+    },
+    {
+        "title":  "Testing locally | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/local-testing/",
+        "html":  "pages/local-testing.html",
+        "markdown":  "pages/local-testing.md"
+    },
+    {
+        "title":  "Wire protocol | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/protocol/",
+        "html":  "pages/protocol.html",
+        "markdown":  "pages/protocol.md"
+    },
+    {
+        "title":  "Quickstart | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/quickstart/",
+        "html":  "pages/quickstart.html",
+        "markdown":  "pages/quickstart.md"
+    },
+    {
+        "title":  "Rules | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/rules/",
+        "html":  "pages/rules.html",
+        "markdown":  "pages/rules.md"
+    },
+    {
+        "title":  "Writing a bot | macpoker docs",
+        "url":  "https://docs.poker.monashcoding.com/writing-a-bot/",
+        "html":  "pages/writing-a-bot.html",
+        "markdown":  "pages/writing-a-bot.md"
+    }
+]
