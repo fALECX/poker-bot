@@ -36,6 +36,10 @@ https://docs.poker.monashcoding.com/.
   and a 64 MB `/tmp` that is wiped after each game.
 - There is no network access. Do not use HTTP, sockets, external APIs,
   subprocesses, background threads, scheduled work, or AI/LLM calls at runtime.
+- A small, self-developed neural network with bundled weights is allowed at
+  runtime; a complete LLM or external AI service is not. Keep inference
+  deterministic and bounded. See
+  [`knowledge-base/neural-network-feasibility.md`](knowledge-base/neural-network-feasibility.md).
 - All bot computation must happen during the bot's own turn (`act()` and the
   supported observer hooks). Do not compute while opponents are acting.
 - Submissions are manually reviewed. Cheating, collusion, hidden-information
@@ -121,4 +125,3 @@ the main entry before the deadline.
 4. Track opponent information only from events legitimately exposed by the SDK.
 5. Keep the final submission minimal, auditable, and free of development-only
    files, secrets, network code, and hidden side channels.
-

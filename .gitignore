@@ -1,0 +1,4 @@
+runs/*
+!runs/.gitkeep
+testing/__pycache__/
+testing/**/*.pyc
