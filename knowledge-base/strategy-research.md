@@ -336,3 +336,179 @@ Preflop-/Pot-Odds-Logik.
 - Exakte interne Implementierungen der PokerBattle.ai-Bots.
 - Ob ein bestimmter komplexer Algorithmus in diesen Hackathons tatsächlich
   besser war als eine gut kalibrierte Heuristik.
+
+## Short English Evaluation of Bot Ideas
+
+These are the same ideas in a short format for team discussion. Each module
+should first be tested independently against the baseline using identical
+seeds.
+
+### Robust Baseline
+
+- **Does:** Uses pot odds, basic hand strength, board texture, position, and
+  active-player count without opponent history.
+- **Why it could work:** Stable, cheap, easy to debug, and a reliable benchmark.
+- **Why it might not:** It cannot exploit predictable opponents and may be too
+  generic or conservative.
+
+### Tight Value
+
+- **Does:** Plays fewer starting hands and emphasizes strong value bets.
+- **Why it could work:** Punishes calling stations and avoids many marginal
+  spots.
+- **Why it might not:** It gives up small profitable pots, becomes predictable,
+  and lets passive opponents realize equity cheaply.
+
+### Loose Pressure
+
+- **Does:** Opens more hands, especially in late position, and uses bets to
+  create fold equity.
+- **Why it could work:** Strong against opponents who fold too often and can
+  accumulate many small pots.
+- **Why it might not:** It enters too many marginal or multiway pots and can
+  lose heavily against callers.
+
+### Anti-All-in
+
+- **Does:** Responds to shoves using equity and pot odds rather than treating
+  every all-in as automatically strong.
+- **Why it could work:** It directly targets `house:allin` and hyperaggressive
+  opponents.
+- **Why it might not:** Calling too widely creates large losses if the
+  opponent's shove range is actually strong.
+
+### Opponent Modeling
+
+- **Does:** Tracks VPIP, raises, folds, aggression, bet sizing, and showdowns
+  per Player-ID.
+- **Why it could work:** It uses information explicitly exposed by the format
+  and allows targeted adjustments against recurring opponents.
+- **Why it might not:** Early samples are noisy, opponents may change style,
+  and overfitting can be worse than a neutral strategy.
+- **Safe version:** Use confidence thresholds or Bayesian shrinkage and apply
+  the profile only as an overlay on the baseline.
+
+### Board- and Street-Aware Play
+
+- **Does:** Adjusts decisions for draws, paired boards, coordinated boards,
+  and flop/turn/river context.
+- **Why it could work:** Board texture changes equity and bluff success
+  substantially.
+- **Why it might not:** Simple board heuristics can be wrong and increase
+  implementation complexity.
+
+### Randomized Balanced Strategy
+
+- **Does:** Mixes actions with calibrated probabilities instead of always
+  taking the same action in the same situation.
+- **Why it could work:** Makes the bot less predictable and supports balanced
+  ranges.
+- **Why it might not:** Randomness does not create EV by itself; bad weights
+  simply lose chips and make debugging harder.
+- **Safe version:** Randomize only between actions that are already
+  individually reasonable.
+
+### Bounded Monte Carlo Equity
+
+- **Does:** Simulates future cards and plausible opponent holdings with a
+  sample count limited by the remaining clock.
+- **Why it could work:** Gives better estimates in unusual, turn/river, and
+  multiway situations than fixed hand categories.
+- **Why it might not:** It costs CPU time, has simulation variance, and is only
+  as good as its assumed opponent ranges.
+- **Safe version:** Use it only for difficult decisions and fall back to
+  deterministic heuristics when the clock is low.
+
+### Bounded Lookahead Search
+
+- **Does:** Simulates a small set of likely future actions and responses.
+- **Why it could work:** It considers future consequences in large pots and
+  near all-in decisions.
+- **Why it might not:** Incorrect response models create false precision, and
+  search can be expensive or time out.
+- **Recommendation:** Test only after equity and baseline logic are strong.
+
+### GTO-Inspired Preflop Ranges
+
+- **Does:** Uses position-dependent opening, calling, and raising ranges.
+- **Why it could work:** Preflop happens frequently, position matters, and
+  ranges are harder to exploit than isolated hand rules.
+- **Why it might not:** Static or heads-up-derived ranges may not fit a
+  five-player duplicate-deal format or weak opponents.
+
+### Adaptive Preflop Ranges
+
+- **Does:** Widens or tightens the starting range based on position and
+  opponent tendencies.
+- **Why it could work:** Combines robust defaults with targeted exploitation.
+- **Why it might not:** Sparse statistics can cause large systematic leaks.
+  Adaptation should be gradual rather than binary.
+
+### Position-Aware Strategy
+
+- **Does:** Plays more hands and applies more pressure late, while tightening
+  early and from the blinds.
+- **Why it could work:** Position is a reliable source of information and EV,
+  and duplicate deals make its effect measurable.
+- **Why it might not:** Position alone does not account for multiway pots or
+  opponent-specific behavior.
+
+### Multiway-Pot Strategy
+
+- **Does:** Adjusts equity thresholds, bluff frequency, and value-bet sizing
+  according to the number of opponents still in the hand.
+- **Why it could work:** Equity and fold probability usually fall as more
+  players continue.
+- **Why it might not:** Simple multiway discounts may be too conservative
+  against opponents with unusually weak ranges.
+
+### Showdown-Based Range Updating
+
+- **Does:** Uses legitimately revealed showdown cards to update opponent
+  ranges and tendencies.
+- **Why it could work:** Showdowns provide stronger evidence than actions alone.
+- **Why it might not:** Showdowns are sparse and biased toward hands that were
+  not folded; one hand must not dominate the profile.
+
+### Exploitative Strategy
+
+- **Does:** Explicitly targets weaknesses, such as bluffing more against
+  frequent folders or value-betting more against frequent callers.
+- **Why it could work:** Beginner and heuristic bots are often predictable,
+  and opponents repeat within a game.
+- **Why it might not:** It fails against adaptive or unknown opponents and can
+  overreact to early noise.
+- **Safe version:** Start with weak adjustments and increase exploit strength
+  only as confidence grows.
+
+### Self-Play Testing
+
+- **Does:** Runs multiple bot versions against one another with identical
+  seeds.
+- **Why it could work:** Gives clean A/B comparisons and catches regressions
+  or position-dependent inconsistencies.
+- **Why it might not:** A bot can overfit to its own style; self-play cannot
+  replace testing against diverse opponents.
+
+### Strategy Ensemble
+
+- **Does:** Combines baseline, position, board, equity, opponent, and
+  randomization modules.
+- **Why it could work:** A safe baseline can handle normal cases while
+  specialized modules handle high-value situations.
+- **Why it might not:** Conflicting modules make behavior unstable and harder
+  to debug.
+- **Suggested priority:** Legal-action safety, low-clock fallback, baseline,
+  board/equity adjustment, opponent adjustment, then controlled randomization.
+
+### Full CFR or Solver-Based Strategy
+
+- **Does:** Attempts to approximate game-theoretic strategies using CFR or
+  related solving methods.
+- **Why it could work:** It has a strong theoretical foundation and can produce
+  less exploitable play.
+- **Why it might not:** The state space, runtime, validation burden, and
+  sandbox limits make a full solver risky; practical heuristics may achieve
+  higher EV against the actual field.
+- **Recommendation:** Borrow the concepts—ranges, randomization, and balance—
+  without making a full solver the core bot.

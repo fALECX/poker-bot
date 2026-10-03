@@ -8,6 +8,12 @@ Bot Hackathon. The authoritative references are the captured documentation in
 provided [`scaffold`](scaffold/README.md). The live documentation is
 https://docs.poker.monashcoding.com/.
 
+## Notes language
+
+Write all new project notes, research notes, strategy evaluations, and similar
+working documentation in English. Existing notes do not need to be translated
+unless they are being substantially revised.
+
 ## Current project layout
 
 - [`scaffold/`](scaffold/) is the unpacked starter template. Its `main.py` is
